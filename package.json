@@ -1,0 +1,25 @@
+{
+  "name": "kalshi-terminal-button-test",
+  "private": true,
+  "version": "0.0.0-test.1",
+  "description": "Throwaway test of a Deploy to Cloudflare button for a prebuilt Worker. Sample data only.",
+  "scripts": {
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.152.0"
+  },
+  "cloudflare": {
+    "bindings": {
+      "OWNER_EMAIL": {
+        "description": "The email you sign in to **Cloudflare** with. Only this email can open your copy."
+      },
+      "ACCESS_TEAM_DOMAIN": {
+        "description": "Set after the first deploy: your Zero Trust team domain, such as `my-team.cloudflareaccess.com`."
+      },
+      "ACCESS_AUD": {
+        "description": "Set after the first deploy: the Access application's **Application Audience (AUD) Tag**."
+      }
+    }
+  }
+}

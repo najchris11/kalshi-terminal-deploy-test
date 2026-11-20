@@ -1,0 +1,49 @@
+# Your copy of the Kalshi terminal on Cloudflare Workers. See DEPLOY-CLOUDFLARE.md beside this file.
+#
+# Change `name` to the name you want; your address will be https://<name>.<your-subdomain>.workers.dev.
+# Secrets (your email and the Kalshi key) are NOT written here: set them with
+# `wrangler secret put` as the guide says.
+
+name = "kalshi-terminal-button-test"
+main = "worker.mjs"
+# The bundle is prebuilt; wrangler uploads it as it is.
+no_bundle = true
+# Upload worker.mjs alone. Without this, wrangler also attaches files beside it (web/index.html) to
+# the Worker as extra modules.
+find_additional_modules = false
+compatibility_date = "2026-10-15"
+workers_dev = true
+preview_urls = false
+# Keep the settings pasted in the dashboard (the two Access values) on every deploy.
+keep_vars = true
+
+[assets]
+directory = "./web"
+binding = "ASSETS"
+# Every request passes through the Worker, so the app's security headers are on every response.
+run_worker_first = true
+not_found_handling = "none"
+
+# Exactly one copy of the server: every request goes to one Durable Object. Do not rename it.
+[[durable_objects.bindings]]
+name = "DESK"
+class_name = "TerminalDesk"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["TerminalDesk"]
+
+[vars]
+KALSHI_ADAPTER = "mock"  # TEST COPY ONLY: sample data, no Kalshi key
+TRADING_ENABLED = "false"
+LOG_LEVEL = "info"
+# Sign-in is Cloudflare Access on your own account (guide, step 3). Paste your team domain and the
+# application's AUD tag here. Neither is secret. Your own email goes in as a secret (OWNER_EMAIL).
+AUTH_PROVIDER = "access"
+# Turning trading on (after the guide's checks): set TRADING_ENABLED = "true" and both limits, in
+# dollars, then `wrangler deploy` again.
+# ORDER_MAX_DOLLARS = "5"
+# DAILY_MAX_DOLLARS = "25"
+
+[observability]
+enabled = true
